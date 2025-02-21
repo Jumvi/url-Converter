@@ -209,7 +209,8 @@
           </p>
 
           <div class="relative flex items-center mx-auto mt-12 overflow-hidden text-left rounded-md">
-            <form method="GET" action="/url" class="w-full max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md">
+            <form method="POST" action="/url" class="w-full max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md">
+              {{ csrfField() }}
               <div class="mb-4">
                 <label for="url" class="block text-white text-sm font-bold mb-2">URL:</label>
                 <input

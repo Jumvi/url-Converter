@@ -2,9 +2,9 @@ import Url from '#models/url'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UrlsController {
-  async index({ view, request, response }: HttpContext) {
-    const url = request.qs().url
-    const shortUrl = request.qs().shortUrl
+  async index({ request, response }: HttpContext) {
+    const url = request.input('url')
+    const shortUrl = request.input('shortUrl')
     const urlData = {
       shortUrl: shortUrl,
       fullUrl: url,
@@ -14,15 +14,11 @@ export default class UrlsController {
 
     const postUrl = await Url.create(urlData)
 
-    const getAllUrls = await Url.all()
-
-    const parseAllUrls = getAllUrls.map((url) => url.toJSON())
-
     if (!postUrl) {
       return response.status(400).send('Error creating new url')
     }
 
-    return view.render('pages/goUrl', { parseAllUrls: parseAllUrls })
+    return response.redirect().toRoute('goUrl')
   }
 
   async shwoUrls({ view, response }: HttpContext) {
@@ -50,5 +46,23 @@ export default class UrlsController {
     const getFullUrl = findUrlByShortUrl.fullUrl
 
     return response.redirect(getFullUrl)
+  }
+
+  async destroy({ response, params }: HttpContext) {
+    try {
+      const urlId = params.id
+
+      const findUrlById = await Url.find(urlId)
+
+      if (!findUrlById) {
+        return response.status(404).send('Url not found')
+      }
+
+      await findUrlById.delete()
+
+      return response.status(200).send('Url deleted')
+    } catch (error) {
+      return response.status(400).send('Error deleting url')
+    }
   }
 }

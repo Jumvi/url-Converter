@@ -12,8 +12,10 @@ import router from '@adonisjs/core/services/router'
 
 router.on('/').render('pages/home')
 
-router.get('/url', new UrlsController().index)
+router.post('/url', new UrlsController().index)
 
 router.get('/shortUrl', new UrlsController().show)
 
 router.get('/pages/goUrl', new UrlsController().shwoUrls).as('goUrl')
+
+router.post('/delete/:id', new UrlsController().destroy)

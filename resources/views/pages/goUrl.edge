@@ -251,25 +251,77 @@
       <ul class="space-y-4">
         @each((url, index) in parseUrlsToJSON)
           <li class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition-colors duration-200">
-            <div class="flex items-center gap-2 mb-2">
-              <span
-                class="bg-white text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold"
-              >
-                {{ index + 1 }}
-              </span>
-              <span class="font-medium text-primary-lighter">{{ url.shortUrl }}</span>
+            {{-- Notez l'utilisation de {{ }} pour l'interpolation de l'ID --}}
+            <div class="cursor-pointer" onclick="toggleActions('actions-{{ url.id }}')">
+              <div class="flex items-center gap-2 mb-2">
+                <span
+                  class="bg-white text-gray-800 rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold"
+                >
+                  {{ index + 1 }}
+          </span>
+                <span class="font-medium text-primary-lighter">{{ url.shortUrl }}</span>
+              </div>
+              <div class="pl-8 text-gray-400 text-sm truncate">
+                {{ url.fullUrl }}
+              </div>
             </div>
-            <div class="pl-8 text-gray-400 text-sm truncate">
-              {{ url.fullUrl }}
+
+            <!-- Actions Panel -->
+            {{-- Notez l'utilisation de {{ }} ici aussi --}}
+            <div id="actions-{{ url.id }}" class="hidden mt-4 pl-8 space-y-2">
+              <form id="deleteForm-{{ url.id }}" onsubmit="deleteUrl(event, {{ url.id }})" class="inline">
+                {{ csrfField() }}
+    <button type="submit" class="text-red-400 hover:text-red-300 text-sm">
+                  Supprimer
+    </button>
+              </form>
+              <button class="text-blue-400 hover:text-blue-300 text-sm ml-4">
+                Mettre à jour
+  </button>
             </div>
           </li>
         @end
       </ul>
     </div>
-
-    <div class="text-center text-gray-500 text-xs mt-6">
-      Total URLs: {{ parseUrlsToJSON.length }}
-    </div>
   </aside>
+
+  <script>
+    function toggleActions(actionId) {
+      const actionsPanel = document.getElementById(actionId);
+      const allPanels = document.querySelectorAll('[id^="actions-"]');
+      // Cache tous les autres panneaux
+      allPanels.forEach(panel => {
+        if (panel.id !== actionId) {
+          panel.classList.add("hidden");
+        }
+      });
+      // Bascule l'affichage du panneau sélectionné
+      actionsPanel.classList.toggle("hidden");
+    }
+    // Nouvelle fonction pour la suppression asynchrone
+    
+    async function deleteUrl(event, urlId) {
+      event.preventDefault();
+      try {
+        const response = await fetch(`/delete/${urlId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Récupérer le token CSRF depuis le formulaire
+            "X-CSRF-Token": document.querySelector('input[name="_csrf"]').value
+          }
+        });
+        if (response.ok) {
+          // Supprimer l'élément du DOM sans rafraîchir la page
+          const listItem = document.querySelector(`#deleteForm-${urlId}`).closest("li");
+          listItem.remove();
+        } else {
+          console.error("Erreur lors de la suppression");
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+      }
+    }
+  </script>
 </body>
 </html>
