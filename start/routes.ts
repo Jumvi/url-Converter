@@ -19,3 +19,5 @@ router.get('/shortUrl', new UrlsController().show)
 router.get('/pages/goUrl', new UrlsController().shwoUrls).as('goUrl')
 
 router.post('/delete/:id', new UrlsController().destroy)
+
+router.post('/update/:id', new UrlsController().update)

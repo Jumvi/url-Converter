@@ -275,9 +275,52 @@
                   Supprimer
     </button>
               </form>
-              <button class="text-blue-400 hover:text-blue-300 text-sm ml-4">
+              <!-- Remplacer le bouton de mise à jour existant par ceci -->
+              <button
+                onclick="showUpdateForm('{{ url.id }}', '{{ url.shortUrl }}', '{{ url.fullUrl }}')"
+                class="text-blue-400 hover:text-blue-300 text-sm ml-4"
+              >
                 Mettre à jour
-  </button>
+</button>
+
+              <!-- Le formulaire de mise à jour -->
+              <div id="updateForm-{{ url.id }}" class="hidden mt-4 space-y-3">
+                <form onsubmit="updateUrl(event, '{{ url.id }}')" class="space-y-3">
+                  {{ csrfField() }}
+                  <div>
+                    <input
+                      type="text"
+                      id="shortUrl-{{ url.id }}"
+                      name="shortUrl"
+                      value="{{ url.shortUrl }}"
+                      class="w-full px-3 py-2 bg-gray-700 rounded text-white text-sm"
+                      placeholder="Nouveau shortUrl"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="url"
+                      id="fullUrl-{{ url.id }}"
+                      name="fullUrl"
+                      value="{{ url.fullUrl }}"
+                      class="w-full px-3 py-2 bg-gray-700 rounded text-white text-sm"
+                      placeholder="Nouveau fullUrl"
+                    />
+                  </div>
+                  <div class="flex space-x-2">
+                    <button type="submit" class="text-green-400 hover:text-green-300 text-sm">
+                      Confirmer
+      </button>
+                    <button
+                      type="button"
+                      onclick="hideUpdateForm('{{ url.id }}')"
+                      class="text-gray-400 hover:text-gray-300 text-sm"
+                    >
+                      Annuler
+      </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </li>
         @end
@@ -317,6 +360,74 @@
           listItem.remove();
         } else {
           console.error("Erreur lors de la suppression");
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+      }
+    }
+    // Ajouter dans la section <script> existante
+    // Dans la section <script> de votre fichier
+    
+    function showUpdateForm(urlId, shortUrl, fullUrl) {
+      // Masquer tous les panneaux d'action
+      document.querySelectorAll('[id^="actions-"]').forEach(panel => {
+        panel.classList.add("hidden");
+      });
+      // Masquer tous les formulaires de mise à jour
+      document.querySelectorAll('[id^="updateForm-"]').forEach(form => {
+        form.classList.add("hidden");
+      });
+      // Afficher le panneau d'action et le formulaire de mise à jour
+      const actionsPanel = document.getElementById(`actions-${urlId}`);
+      const updateForm = document.getElementById(`updateForm-${urlId}`);
+      if (actionsPanel && updateForm) {
+        actionsPanel.classList.remove("hidden");
+        updateForm.classList.remove("hidden");
+        // Pré-remplir les champs
+        const shortUrlInput = document.getElementById(`shortUrl-${urlId}`);
+        const fullUrlInput = document.getElementById(`fullUrl-${urlId}`);
+        if (shortUrlInput && fullUrlInput) {
+          shortUrlInput.value = shortUrl;
+          fullUrlInput.value = fullUrl;
+        }
+      }
+    }
+    
+    function hideUpdateForm(urlId) {
+      const updateForm = document.getElementById(`updateForm-${urlId}`);
+      const actionsPanel = document.getElementById(`actions-${urlId}`);
+      if (updateForm && actionsPanel) {
+        updateForm.classList.add("hidden");
+        actionsPanel.classList.add("hidden");
+      }
+    }
+    
+    async function updateUrl(event, urlId) {
+      event.preventDefault();
+      const form = event.target;
+      try {
+        const shortUrl = document.getElementById(`shortUrl-${urlId}`).value;
+        const fullUrl = document.getElementById(`fullUrl-${urlId}`).value;
+        const response = await fetch(`/update/${urlId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": form.querySelector('input[name="_csrf"]').value
+          },
+          body: JSON.stringify({
+            shortUrl: shortUrl,
+            fullUrl: fullUrl
+          })
+        });
+        if (response.ok) {
+          // Mettre à jour l'affichage sans rafraîchir
+          const listItem = form.closest("li");
+          listItem.querySelector(".text-primary-lighter").textContent = shortUrl;
+          listItem.querySelector(".text-gray-400.truncate").textContent = fullUrl;
+          // Cacher le formulaire de mise à jour
+          hideUpdateForm(urlId);
+        } else {
+          console.error("Erreur lors de la mise à jour");
         }
       } catch (error) {
         console.error("Erreur:", error);

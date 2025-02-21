@@ -65,4 +65,37 @@ export default class UrlsController {
       return response.status(400).send('Error deleting url')
     }
   }
+
+  async update({ params, request, response }: HttpContext) {
+    try {
+      const urlId = params.id
+
+      const findUrlById = await Url.findOrFail(urlId)
+
+      if (!findUrlById) {
+        return response.status(404).send('Url not found')
+      }
+
+      const fullUrl = request.input('fullUrl')
+      const shortUrl = request.input('shortUrl')
+
+      findUrlById.merge({
+        fullUrl: fullUrl,
+        shortUrl: shortUrl,
+      })
+
+      await findUrlById.save()
+
+      return response.status(200).json({
+        success: true,
+        data: findUrlById,
+      })
+    } catch (error) {
+      console.error('Error updating URL:', error)
+      return response.status(400).json({
+        success: false,
+        message: 'Error updating URL',
+      })
+    }
+  }
 }
