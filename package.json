@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node build/server.js",
-    "vercel-build": "NODE_ENV=production node ace build && vite build",
+    "vercel-build": "node ace build && vite build",
     "build": "vite build",
     "build:assets": "vite build --mode production",
     "build:client": "vite build",
