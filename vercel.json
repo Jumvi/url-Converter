@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "buildCommand": "node ace build --production && npm run build",
+  "outputDirectory": "build",
+  "builds": [
+    {
+      "src": "build/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "build/server.js"
+    }
+  ]
+}

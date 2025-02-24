@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-      AdonisJS - A fully featured web framework for Node.js
+      go to my Url
     </title>
 
     <link rel="preconnect" href="https://fonts.bunny.net" />
@@ -328,111 +328,7 @@
     </div>
   </aside>
 
-  <script>
-    function toggleActions(actionId) {
-      const actionsPanel = document.getElementById(actionId);
-      const allPanels = document.querySelectorAll('[id^="actions-"]');
-      // Cache tous les autres panneaux
-      allPanels.forEach(panel => {
-        if (panel.id !== actionId) {
-          panel.classList.add("hidden");
-        }
-      });
-      // Bascule l'affichage du panneau sélectionné
-      actionsPanel.classList.toggle("hidden");
-    }
-    // Nouvelle fonction pour la suppression asynchrone
-    
-    async function deleteUrl(event, urlId) {
-      event.preventDefault();
-      try {
-        const response = await fetch(`/delete/${urlId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Récupérer le token CSRF depuis le formulaire
-            "X-CSRF-Token": document.querySelector('input[name="_csrf"]').value
-          }
-        });
-        if (response.ok) {
-          // Supprimer l'élément du DOM sans rafraîchir la page
-          const listItem = document.querySelector(`#deleteForm-${urlId}`).closest("li");
-          listItem.remove();
-        } else {
-          console.error("Erreur lors de la suppression");
-        }
-      } catch (error) {
-        console.error("Erreur:", error);
-      }
-    }
-    // Ajouter dans la section <script> existante
-    // Dans la section <script> de votre fichier
-    
-    function showUpdateForm(urlId, shortUrl, fullUrl) {
-      // Masquer tous les panneaux d'action
-      document.querySelectorAll('[id^="actions-"]').forEach(panel => {
-        panel.classList.add("hidden");
-      });
-      // Masquer tous les formulaires de mise à jour
-      document.querySelectorAll('[id^="updateForm-"]').forEach(form => {
-        form.classList.add("hidden");
-      });
-      // Afficher le panneau d'action et le formulaire de mise à jour
-      const actionsPanel = document.getElementById(`actions-${urlId}`);
-      const updateForm = document.getElementById(`updateForm-${urlId}`);
-      if (actionsPanel && updateForm) {
-        actionsPanel.classList.remove("hidden");
-        updateForm.classList.remove("hidden");
-        // Pré-remplir les champs
-        const shortUrlInput = document.getElementById(`shortUrl-${urlId}`);
-        const fullUrlInput = document.getElementById(`fullUrl-${urlId}`);
-        if (shortUrlInput && fullUrlInput) {
-          shortUrlInput.value = shortUrl;
-          fullUrlInput.value = fullUrl;
-        }
-      }
-    }
-    
-    function hideUpdateForm(urlId) {
-      const updateForm = document.getElementById(`updateForm-${urlId}`);
-      const actionsPanel = document.getElementById(`actions-${urlId}`);
-      if (updateForm && actionsPanel) {
-        updateForm.classList.add("hidden");
-        actionsPanel.classList.add("hidden");
-      }
-    }
-    
-    async function updateUrl(event, urlId) {
-      event.preventDefault();
-      const form = event.target;
-      try {
-        const shortUrl = document.getElementById(`shortUrl-${urlId}`).value;
-        const fullUrl = document.getElementById(`fullUrl-${urlId}`).value;
-        const response = await fetch(`/update/${urlId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": form.querySelector('input[name="_csrf"]').value
-          },
-          body: JSON.stringify({
-            shortUrl: shortUrl,
-            fullUrl: fullUrl
-          })
-        });
-        if (response.ok) {
-          // Mettre à jour l'affichage sans rafraîchir
-          const listItem = form.closest("li");
-          listItem.querySelector(".text-primary-lighter").textContent = shortUrl;
-          listItem.querySelector(".text-gray-400.truncate").textContent = fullUrl;
-          // Cacher le formulaire de mise à jour
-          hideUpdateForm(urlId);
-        } else {
-          console.error("Erreur lors de la mise à jour");
-        }
-      } catch (error) {
-        console.error("Erreur:", error);
-      }
-    }
-  </script>
+  <!-- Remplacer toute la section <script> par : -->
+  @vite(['resources/css/app.css', 'resources/js/urls.js'])
 </body>
 </html>
