@@ -8,16 +8,7 @@ export default defineConfig({
       reload: ['resources/views/**/*.edge'],
     }),
   ],
-  build: {
-    outDir: 'public/build',
-    assetsDir: '.',
-    manifest: true,
-    rollupOptions: {
-      input: {
-        app: 'resources/js/app.js',
-      },
-    },
-  },
+
   define: {
     'process.env.NODE_ENV': '"production"',
   },
