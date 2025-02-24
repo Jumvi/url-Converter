@@ -6,8 +6,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node build/server.js",
-    "vercel-build": "npm run build",
-    "build": "node ace build --production && npm run build:assets",
+    "vercel-build": "node ace build --production && node ace vite:build",
+    "build": "node ace build --production && node ace vite:build",
     "build:assets": "node ace vite:build",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
