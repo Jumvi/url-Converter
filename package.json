@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node build/server.js",
     "vercel-build": "node ace build && node ace vite:build && cp .env.production .env",
-    "build": "node ace build && node ace vite:build",
+    "build": "node ace build ",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
