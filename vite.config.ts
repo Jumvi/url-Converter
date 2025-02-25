@@ -12,9 +12,10 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': '"production"',
   },
+
   server: {
     hmr: {
-      host: 'localhost',
+      host: process.env.VITE_HMR_HOST || 'localhost',
     },
   },
 })

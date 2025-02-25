@@ -1,15 +1,18 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "build",
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "public",
+  "env": {
+    "NODE_ENV": "production"
+  },
   "routes": [
     {
       "src": "/assets/(.*)",
-      "dest": "/build/assets/$1"
+      "dest": "/assets/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "build/server.js"
+      "dest": "/server.js"
     }
   ]
 }

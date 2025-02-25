@@ -6,11 +6,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node build/server.js",
-    "vercel-build": "node ace build && vite build",
-    "build": "vite build",
-    "build:assets": "vite build --mode production",
-    "build:client": "vite build",
-    "postinstall": "node ace build && npm run build:assets",
+    "vercel-build": "node ace build  && vite build",
+    "build": "node ace build  && vite build",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
