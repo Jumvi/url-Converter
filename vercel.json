@@ -11,16 +11,5 @@
       "src": "/(.*)",
       "dest": "build/server.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "HOST": "0.0.0.0",
-    "PORT": "3333",
-    "DB_CONNECTION": "pg",
-    "DB_HOST": "url_converter.neon.tech",
-    "DB_PORT": "5432",
-    "DB_USER": "neondb_owner",
-    "DB_PASSWORD": "npg_PBAiTGfI2k3C",
-    "DB_DATABASE": "url_converter"
-  }
+  ]
 }
