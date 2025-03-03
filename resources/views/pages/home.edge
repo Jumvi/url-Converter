@@ -150,112 +150,112 @@
               <div
                 class="flex-col items-center w-full h-full p-3 overflow-hidden bg-black bg-opacity-50 rounded-lg select-none md:p-0 backdrop-blur-lg md:h-auto md:bg-transparent md:rounded-none md:relative md:flex md:flex-row md:overflow-auto"
               >
-                {{--  <div class="flex flex-col items-center justify-end w-full h-full pt-2 md:w-full md:flex-row md:py-0">
-                  <a
-                    href="#_"
-                    class="w-full py-5 mr-0 text-center text-gray-200 md:py-3 md:w-auto hover:text-white md:pl-0 md:mr-3 lg:mr-5"
-                  >Sign In</a>
-                  <a
-                    href="#_"
-                    class="inline-flex items-center justify-center w-full px-4 py-3 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 text-gray-600 md:w-auto bg-white rounded-lg md:rounded-full hover:bg-white focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700"
-                  >Sign Up</a>
-                </div>  --}}
-              </div>
+                Up</a>
             </div>
-            <div
-              @click="showMenu = !showMenu"
-              class="absolute right-0 z-50 flex flex-col items-end translate-y-1.5 w-10 h-10 p-2 mr-4 rounded-full cursor-pointer md:hidden hover:bg-gray-200/10 hover:bg-opacity-10"
-              :class="{ 'text-gray-400': showMenu, 'text-gray-100': !showMenu }"
+          </div>
+        </div>
+        <div
+          @click="showMenu = !showMenu"
+          class="absolute right-0 z-50 flex flex-col items-end translate-y-1.5 w-10 h-10 p-2 mr-4 rounded-full cursor-pointer md:hidden hover:bg-gray-200/10 hover:bg-opacity-10"
+          :class="{ 'text-gray-400': showMenu, 'text-gray-100': !showMenu }"
+        >
+          <svg
+            class="w-6 h-6"
+            x-show="!showMenu"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            x-cloak
+          >
+            <path d="M4 6h16M4 12h16M4 18h16" />
+
+          </svg>
+          <svg
+            class="w-6 h-6"
+            x-show="showMenu"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            x-cloak
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+
+          </svg>
+        </div>
+      </div>
+    </nav>
+    <div class="container px-6 py-32 mx-auto md:text-center md:px-4">
+      <h1
+        class="text-4xl font-extrabold leading-none leading-10 tracking-tight text-white sm:text-5xl md:text-6xl xl:text-7xl"
+      >
+        <span class="block">"Smart URL, Easy Access! 🚀" </span>        <span class="relative inline-block mt-3 text-white">Url converter</span>
+      </h1>
+      <p
+        class="mx-auto mt-6 text-sm text-left text-gray-200 md:text-center md:mt-12 sm:text-base md:max-w-xl md:text-lg xl:text-xl"
+      >
+        Turn your links into unique phrases! 🔗✨ Enter your URL and a custom keyword, and get a smart link. Just type in your phrase, and off you go! Try it now!!
+      </p>
+
+      <div class="relative flex flex-col items-center mx-auto mt-12 overflow-hidden text-left rounded-md">
+        <form method="POST" action="/url" class="w-full max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md">
+          {{ csrfField() }}
+          <div class="mb-4">
+            <label for="url" class="block text-white text-sm font-bold mb-2">URL:</label>
+            <input
+              type="url"
+              id="url"
+              name="url"
+              placeholder="Entrez l'URL"
+              required
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="shortUrl" class="block text-white text-sm font-bold mb-2">phrase à encoder:</label>
+            <input
+              type="text"
+              id="shortUrl"
+              name="shortUrl"
+              placeholder="Entrez la phrase"
+              required
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <button
+              type="submit"
+              class="bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              <svg
-                class="w-6 h-6"
-                x-show="!showMenu"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                x-cloak
-              >
-                <path d="M4 6h16M4 12h16M4 18h16" />
-
-              </svg>
-              <svg
-                class="w-6 h-6"
-                x-show="showMenu"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                x-cloak
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-
-              </svg>
-            </div>
+              Envoyer l'URL
+                </button>
           </div>
-        </nav>
-        <div class="container px-6 py-32 mx-auto md:text-center md:px-4">
-          <h1
-            class="text-4xl font-extrabold leading-none leading-10 tracking-tight text-white sm:text-5xl md:text-6xl xl:text-7xl"
-          >
-            <span class="block">"Smart URL, Easy Access! 🚀" </span>            <span class="relative inline-block mt-3 text-white">Url converter</span>
-          </h1>
-          <p
-            class="mx-auto mt-6 text-sm text-left text-gray-200 md:text-center md:mt-12 sm:text-base md:max-w-xl md:text-lg xl:text-xl"
-          >
-            Turn your links into unique phrases! 🔗✨ Enter your URL and a custom keyword, and get a smart link. Just type in your phrase, and off you go! Try it now!!
-          </p>
-
-          <div class="relative flex items-center mx-auto mt-12 overflow-hidden text-left rounded-md">
-            <form method="POST" action="/url" class="w-full max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md">
-              {{ csrfField() }}
-              <div class="mb-4">
-                <label for="url" class="block text-white text-sm font-bold mb-2">URL:</label>
-                <input
-                  type="url"
-                  id="url"
-                  name="url"
-                  placeholder="Entrez l'URL"
-                  required
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div class="mb-4">
-                <label for="shortUrl" class="block text-white text-sm font-bold mb-2">phrase à encoder:</label>
-                <input
-                  type="text"
-                  id="shortUrl"
-                  name="shortUrl"
-                  placeholder="Entrez la phrase"
-                  required
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
-              <div class="flex items-center justify-between">
-                <button
-                  type="submit"
-                  class="bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                >
-                  Envoyer l'URL
-      </button>
-              </div>
-            </form>
-          </div>
-        </span>
-        <div class="text-center mt-4 text-white">
+        </form>
+        <div class="mt-8 flex justify-center gap-4 text-white">
           <p>
-            Already have a keyword to test? <a href="{{ route('goUrl') }}" class="text-blue-400 hover:underline">Go to the test page</a>
+            Already have a shortUrl for this Url?
           </p>
+          <a href="{{ route('goUrl') }}" class="text-blue-400 hover:text-blue-300 transition-colors">
+            Go to use your shortUrl
+          </a>
+
         </div>
 
       </div>
-      <div class="mt-8 text-sm text-gray-300">
-        By signing up, you agree to our terms and services.
+
+      <div class="text-center mt-4 text-white">
+
       </div>
+
+    </div>
+    <div class="mt-8 text-sm text-gray-300">
+      By signing up, you agree to our terms and services.
     </div>
   </div>
+</div>
 </section>
 
 </body>
