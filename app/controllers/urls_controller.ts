@@ -5,6 +5,10 @@ import QRCode from 'qrcode'
 export default class UrlsController {
   async index({ request, response }: HttpContext) {
     const url = request.input('url')
+    const searchShortUrl = request.qs().shortUrl
+    if (searchShortUrl) {
+      console.log('searchShortUrl', searchShortUrl)
+    }
     console.log('url', url)
     const shortUrl = request.input('shortUrl')
     const urlData = {
@@ -25,19 +29,58 @@ export default class UrlsController {
     return response.redirect().toRoute('goUrl')
   }
 
-  async shwoUrls({ response, view }: HttpContext) {
-    const urls = await Url.query().preload('qrcode').exec()
+  async shwoUrls({ response, view, request }: HttpContext) {
+    try {
+      const searchUrlValue = request.input('q')
+      let urls
 
-    if (!urls) {
-      response.status(404).send('No urls found')
+      if (searchUrlValue) {
+        // Search case
+        urls = await Url.query()
+          .where('shortUrl', 'ILIKE', `%${searchUrlValue}%`)
+          .orWhere('fullUrl', 'ILIKE', `%${searchUrlValue}%`)
+          .preload('qrcode')
+          .exec()
+      } else {
+        // Regular listing case
+        urls = await Url.query().preload('qrcode').exec()
+      }
+
+      if (!urls || urls.length === 0) {
+        return view.render('pages/goUrl', {
+          parseUrlsToJSON: [],
+          searchQuery: searchUrlValue,
+          message: searchUrlValue ? 'No results found' : 'No URLs available',
+        })
+      }
+
+      const parseUrlsToJSON = urls.map((url) => ({
+        ...url.toJSON(),
+        qrcode: url.qrcode ? url.qrcode.toJSON() : null,
+      }))
+
+      return view.render('pages/goUrl', {
+        parseUrlsToJSON,
+        searchQuery: searchUrlValue,
+      })
+    } catch (error) {
+      console.error('Error fetching URLs:', error)
+      return response.status(500).send('Error fetching URLs')
     }
+  }
 
-    const parseUrlsToJSON = urls.map((url) => ({
+  async searhbyShortUrl({ request, response }: HttpContext) {
+    const searchUrlValue = request.input('q')
+    console.log('searchUrlValue', searchUrlValue)
+    const findUrlInformation = await Url.query()
+      .where('shortUrl', 'like', `%${searchUrlValue}%`)
+      .preload('qrcode')
+      .exec()
+    const parseUrlsToJSON = findUrlInformation.map((url) => ({
       ...url.toJSON(),
       qrcode: url.qrcode ? url.qrcode.toJSON() : null,
     }))
-
-    return view.render('pages/goUrl', { parseUrlsToJSON })
+    response.redirect().toRoute('goUrl', { parseUrlsToJSON })
   }
 
   async show({ response, request }: HttpContext) {
