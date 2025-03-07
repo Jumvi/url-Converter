@@ -1,34 +1,41 @@
 import Url from '#models/url'
 import type { HttpContext } from '@adonisjs/core/http'
+import QRCode from 'qrcode'
 
 export default class UrlsController {
   async index({ request, response }: HttpContext) {
     const url = request.input('url')
+    console.log('url', url)
     const shortUrl = request.input('shortUrl')
     const urlData = {
       shortUrl: shortUrl,
       fullUrl: url,
     }
-
-    console.log('urlData', urlData)
-
+    const createQrcode = await QRCode.toDataURL(url)
+    console.log('postUrl', urlData)
     const postUrl = await Url.create(urlData)
+    const qrcode = await postUrl
+      .related('qrcode')
+      .create({ qr_code: createQrcode, url_id: postUrl.id })
 
-    if (!postUrl) {
+    if (!postUrl || !qrcode) {
       return response.status(400).send('Error creating new url')
     }
 
     return response.redirect().toRoute('goUrl')
   }
 
-  async shwoUrls({ view, response }: HttpContext) {
-    const urls = await Url.all()
+  async shwoUrls({ response, view }: HttpContext) {
+    const urls = await Url.query().preload('qrcode').exec()
 
     if (!urls) {
       response.status(404).send('No urls found')
     }
 
-    const parseUrlsToJSON = urls.map((url) => url.toJSON())
+    const parseUrlsToJSON = urls.map((url) => ({
+      ...url.toJSON(),
+      qrcode: url.qrcode ? url.qrcode.toJSON() : null,
+    }))
 
     return view.render('pages/goUrl', { parseUrlsToJSON })
   }
@@ -70,10 +77,17 @@ export default class UrlsController {
     try {
       const urlId = params.id
 
-      const findUrlById = await Url.findOrFail(urlId)
+      const findUrlById = await Url.find(urlId)
 
       if (!findUrlById) {
         return response.status(404).send('Url not found')
+      }
+
+      const findUrlIdInQrcode = await findUrlById.related('qrcode').query().first()
+      if (!findUrlIdInQrcode) {
+        const qrCodeForUrl = await QRCode.toDataURL(findUrlById.fullUrl)
+        await findUrlById.related('qrcode').create({ qr_code: qrCodeForUrl })
+        await findUrlById.save()
       }
 
       const fullUrl = request.input('fullUrl')

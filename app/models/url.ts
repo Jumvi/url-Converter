@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
+import QrCode from './qr_code.js'
 
 export default class Url extends BaseModel {
   @column({ isPrimary: true })
@@ -16,4 +18,9 @@ export default class Url extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasOne(() => QrCode, {
+    foreignKey: 'url_id',
+  })
+  declare qrcode: HasOne<typeof QrCode>
 }

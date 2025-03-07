@@ -264,11 +264,22 @@
               <div class="pl-8 text-gray-400 text-sm truncate">
                 {{ url.fullUrl }}
               </div>
+
             </div>
 
             <!-- Actions Panel -->
             {{-- Notez l'utilisation de {{ }} ici aussi --}}
             <div id="actions-{{ url.id }}" class="hidden mt-4 pl-8 space-y-2">
+              @if(url.qrcode )
+                <img
+                  src="{{ url.qrcode.qrCode }}"
+                  alt="QR code pour {{ url.shortUrl }}"
+                  class="w-20 h-20 rounded-lg bg-white p-1"
+                />
+              @else
+                <p class="text-gray-400 text-sm">
+                </p>
+              @endif
               <form id="deleteForm-{{ url.id }}" onsubmit="deleteUrl(event, {{ url.id }})" class="inline">
                 {{ csrfField() }}
     <button type="submit" class="text-red-400 hover:text-red-300 text-sm">
