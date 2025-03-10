@@ -64,6 +64,7 @@
     "@adonisjs/vite": "^4.0.0",
     "@tailwindcss/vite": "^4.0.9",
     "@vinejs/vine": "^3.0.0",
+    "alpinejs": "^3.14.8",
     "edge.js": "^6.2.1",
     "edgedb": "^1.5.12",
     "gel": "^2.0.0",
