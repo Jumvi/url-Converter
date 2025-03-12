@@ -1,23 +1,24 @@
 import { defineConfig } from 'vite'
-import adonisjs from '@adonisjs/vite/client'
-import tailwindcss from '@tailwindcss/vite'
+import { getDirname } from '@poppinss/utils'
+import { resolve } from 'node:path'
+import adonis from '@adonisjs/vite/client'
+
+const __dirname = getDirname(import.meta.url)
 
 export default defineConfig({
   plugins: [
-    adonisjs({
+    adonis({
       entrypoints: ['resources/css/app.css', 'resources/js/app.js'],
-      reload: ['resources/views/**/*.edge'],
-    }),
-    tailwindcss(),
+      reload: ['resources/views/**/*.edge']
+    })
   ],
-
-  define: {
-    'process.env.NODE_ENV': '"production"',
+  build: {
+    manifest: true,
+    outDir: 'public/assets'
   },
-
-  server: {
-    hmr: {
-      host: process.env.VITE_HMR_HOST || 'localhost',
-    },
-  },
+  resolve: {
+    alias: {
+      '~/': resolve(__dirname, './resources')
+    }
+  }
 })
