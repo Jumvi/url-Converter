@@ -5,9 +5,9 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "start":  "node server.js",
+    "start": "node server.js",
     "vercel-build": "node ace build && node ace vite:build && cp .env.production .env",
-    "build": "node ace build --production",
+    "build": "node ace build",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
