@@ -7,12 +7,10 @@
 |
 */
 
-import CombinateCreateShorUrlAndGenerateUrlsController from '#controllers/combinate_create_shor_url_and_generate_urls_controller'
-import CombinatesController from '#controllers/combinates_controller'
 import UrlsController from '#controllers/urls_controller'
 import router from '@adonisjs/core/services/router'
 
-router.on('/').render('pages/home')
+router.on('/').render('pages/home').as('home')
 
 router.post('/url', new UrlsController().index)
 
