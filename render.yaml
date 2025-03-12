@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: url-shortener
+    name: url-Converter
     env: node
     buildCommand: |
       npm ci
